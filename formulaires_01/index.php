@@ -1,5 +1,8 @@
 <?php
 
+$step = 1;
+require_once("action.php");
+
 ?>
 
 <!DOCTYPE html>

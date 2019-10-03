@@ -9,9 +9,13 @@ if (isset($_GET["formValues"])) {
 	$formValues = $_GET["formValues"];
 	$ageValue = $formValues["age"];
 }
+
 ?>
 
-<form method="POST" action="action.php">
+<form method="POST" action="index.php">
+	
+	<?php if ($step == 1) { ?>
+
 	<div class="field">
 	  <label class="label" for="firstname">Firstname</label>
 	  <div class="control">
@@ -26,16 +30,20 @@ if (isset($_GET["formValues"])) {
 	  </div>
 	</div>
 
-	<div class="field">	
+	<?php } ?>
+
+	<?php if ($step == 2) { ?>
+
 	<div class="field">
 	  <label class="label" for="lastname">lastname</label>	  <div class="control">
 	  	<input required id="lastname" name="lastname" class="input <?php if (isset($errors['lastname'])) echo 'is-danger'; ?>" type="text" placeholder="Doe"
 	  	value="<?php if (isset($formValues['lastname'])) echo $formValues['lastname']; ?>">
 	    <p style="color:red;"><?php if (isset($errors["lastname"])) echo $errors['lastname']; ?></p>
-	    
-
-	  </div>
 	</div>
+
+	<?php } ?>
+
+	<?php if ($step == 3) { ?>
 
 	<div class="select <?php if (isset($errors['age'])) echo 'is-danger'; ?>">
 		<select	name="age">
@@ -57,5 +65,17 @@ if (isset($_GET["formValues"])) {
 		</select>
 	    <p style="color:red;"><?php if (isset($errors["age"])) echo $errors['age']; ?></p>
 	</div>
-	<button class="button" type="submit" name="register-submit" value="register">Register!</button>
+
+		<input type='hidden' name="lastname" value="<?= $lastname ?>" />
+
+
+	<?php } ?>
+
+	<?php if ($step >= 2) { ?>
+		<input type='hidden' name="firstname" value="<?= $firstname ?>" />
+	<?php } ?>
+
+	<input type='hidden' name="step" value="<?= $step ?>" />
+
+	<input class="button" type="submit" name="register-submit" value="Register" />
 </form>
