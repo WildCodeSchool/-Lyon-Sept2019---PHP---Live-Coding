@@ -1,0 +1,22 @@
+.card{
+	display: flex;
+	flex-direction: row;
+	border: 3px solid pink;
+	padding: 16px 24px;
+	margin-bottom: 24px;
+}
+
+.description{
+	margin-left : 24px;
+	display: flex;
+	flex-direction: column;
+	flex : 1;
+}
+
+.name{
+	flex:1;
+}
+
+.price{
+	text-align: right;
+}
