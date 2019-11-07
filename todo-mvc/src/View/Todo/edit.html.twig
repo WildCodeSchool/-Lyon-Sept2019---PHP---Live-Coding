@@ -1,0 +1,12 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+
+	<h4>Edit todo #{{todo.id}}</h4>
+	<a href="/todo/list">Back to list</a>
+	<form method="POST" action="/todo/edit/{{todo.id}}">
+		<input type="text" name="content" value="{{todo.content}}" />
+		<button type="submit">save</button>
+	</form>
+
+{% endblock %}

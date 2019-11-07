@@ -1,0 +1,27 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+
+	<h1>TODO:</h1>
+
+	{% for todo in todos %}
+		<div style="display:flex; align-items:center; width: 400px;">
+			<p style="flex:1;">{{ todo.content }}</p>
+			<form method="POST" action="/todo/delete/{{todo.id}}">
+				<button name="delete" type="submit">
+					<strong>X</strong>
+				</button>
+			</form>
+			<a href="/todo/edit/{{todo.id}}" style="margin-left: 10px;">Edit</a>
+		</div>
+	{% endfor %}
+
+	<form method="POST" action="/todo/create">
+		<fieldset>
+		    <legend>ADD TODO</legend>
+			<input name="content" type="text" />
+			<button type='submit'>Add todo</button>
+		</fieldset>
+	</form>
+
+{% endblock %}
