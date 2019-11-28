@@ -3,32 +3,43 @@
 {% block title %}Hello RentalController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Rentals</h1>
-
-    <ul>
+<div style="display:flex; flex-direction:column;">
+    <h1 style="text-align:center;">Trouvez le logement de vos rêves <3</h1>
+    <p>Page {{page}}</p>
+    <div style="display:flex; flex-wrap: wrap; justify-content: center;">
     	{% for house in houses %}
-    		<li><a href="{{ path('rental_view', {id: house.id}) }}">{{ house.title }} - {{ house.city.name }}</a></li>
+        	<div class="card" style="width: 18rem; flex-shrink: 0; margin: 8px;">
+              <img class="card-img-top" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/katie-hodges-design-master-bedroom-1549666083.png" alt="{{house.title}}">
+              <div class="card-body">
+                <h5 class="card-title">{{ house.title }}</h5>
+                <p class="card-text">{{ house.city.name }}</p>
+                <a href="{{ path('rental_view', {slug: house.slug}) }}" class="btn btn-primary">Visiter</a>
+              </div>
+            </div>
     	{% endfor %}
-    </ul>
-   {# <h1>By city ...</h1>
-    <ul>
-    	{% for city in cities %}
-    		<li>{{city.name}}: <br/>
-    			<ul>
-    				{% for house in city.houses %}
-    					<li>{{ house.title }}</li>
-    				{% else %}
-	    				<li><em>Y a rien ici !</em></li>
-    				{% endfor %}
-    			</ul>
-    		</li>
-    	{% endfor %}
-    </ul>#}
+    </div>
+    <nav aria-label="Page navigation example" style="align-self:center;">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" 
+              href="{{ path('rentals_list', {'page': page > 1 ? page - 1 : 1}) }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        {#
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link disabled" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        #}
+        <li class="page-item">
+          <a class="page-link" href="{{ path('rentals_list', {'page': page + 1}) }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
 </div>
 {% endblock %}

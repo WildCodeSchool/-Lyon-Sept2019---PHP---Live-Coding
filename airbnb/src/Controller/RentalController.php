@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use App\Entity\House;
 use App\Entity\City;
 
@@ -12,29 +13,33 @@ use App\Entity\City;
  */
 class RentalController extends AbstractController
 {
+
+    const NB_HOUSE_PER_PAGE = 6;
+
     /**
      * @Route("/", name="rentals_list")
      */
-    public function index()
+    public function index(Request $request)
     {
+        $page = $request->query->get('page', 1);
+
 		$houses = $this->getDoctrine()
 	        ->getRepository(House::class)
-	        ->findAll();
-
-	    // var_dump($houses);
+            ->findBy([], null, self::NB_HOUSE_PER_PAGE, ($page -1) * self::NB_HOUSE_PER_PAGE);
 
         $cities = $this->getDoctrine()
             ->getRepository(City::class)
-            ->findAll();
+	        ->findAll();
 
         return $this->render('rental/index.html.twig', [
             'houses' => $houses,
             'cities' => $cities,
+            'page' => $page,
         ]);
     }
 
     /**
-    * @Route("/{id}", name="rental_view")
+    * @Route("/{slug}", name="rental_view")
     */
     public function view(House $house)
     {
