@@ -33,6 +33,37 @@ class HouseRepository extends ServiceEntityRepository
     }
     
 
+    public function filterSearch($filters = [], $limit = -1, $offset = -1)
+    {
+        $qb = $this->createQueryBuilder('h');
+        $parameters = [];
+
+        if (isset($filters['city']) && !empty($filters['city'])) {
+            $qb->andWhere('h.city = :city');
+            $parameters['city'] = $filters['city'];
+        }
+        if (isset($filters['type']) && !empty($filters['type'])) {
+            $qb->andWhere('h.type = :type');
+            $parameters['type'] = $filters['type'];
+        }
+        if (isset($filters['price']) && !empty($filters['price'])) {
+            $qb->andWhere('h.price = :price');
+            $parameters['price'] = $filters['price'];
+        }
+        if (isset($filters['bedNumber']) && !empty($filters['bedNumber'])) {
+            $qb->andWhere('h.bedNumber = :bedNumber');
+            $parameters['bedNumber'] = $filters['bedNumber'];
+        }
+
+        if ($offset > -1)
+            $qb->setFirstResult( $offset );
+        if ($limit > -1)
+           $qb->setMaxResults( $limit );
+
+        $qb->setParameters($parameters);
+        return $qb->getQuery()->getResult();
+    }
+
     /*
     public function findOneBySomeField($value): ?House
     {

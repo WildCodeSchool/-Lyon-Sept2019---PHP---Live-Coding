@@ -6,7 +6,13 @@
 
 <div style="display:flex; flex-direction:column;">
     <h1 style="text-align:center;">Trouvez le logement de vos rêves <3</h1>
+
+    {{ form_start(searchForm) }}
+      <button class="btn btn-primary" type="submit">Search</button>
+    {{ form_end(searchForm) }}
+    
     <p>Page {{page}}</p>
+    
     <div style="display:flex; flex-wrap: wrap; justify-content: center;">
     	{% for house in houses %}
         	<div class="card" style="width: 18rem; flex-shrink: 0; margin: 8px;">
@@ -19,6 +25,7 @@
             </div>
     	{% endfor %}
     </div>
+
     <nav aria-label="Page navigation example" style="align-self:flex-start;">
       <ul class="pagination">
 

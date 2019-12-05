@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\House;
 use App\Entity\City;
 
+use App\Form\SearchType;
+
 /**
  * @Route("/rentals")
  */
@@ -23,9 +25,26 @@ class RentalController extends AbstractController
     {
         $page = $request->query->get('page', 1);
 
-		$houses = $this->getDoctrine()
-	        ->getRepository(House::class)
-            ->findBy([], null, self::NB_HOUSE_PER_PAGE, ($page -1) * self::NB_HOUSE_PER_PAGE);
+        $searchForm = $this->createForm(SearchType::class, null, [
+            'method' => 'GET',
+        ]);
+
+        $searchForm->handleRequest($request);
+
+        $houses = [];
+
+        if ($searchForm->isSubmitted() && $searchForm->isValid())
+        {
+            $filters = $searchForm->getData(); // Returns an Array ['city' => .... , "type" => ...., "bedNumber" => ...., "price" => ...]
+
+            $houses = $this->getDoctrine()
+                ->getRepository(House::class)
+                ->filterSearch($filters, self::NB_HOUSE_PER_PAGE, ($page -1) * self::NB_HOUSE_PER_PAGE);
+        } else {        
+    		$houses = $this->getDoctrine()
+    	        ->getRepository(House::class)
+                ->findBy([], null, self::NB_HOUSE_PER_PAGE, ($page -1) * self::NB_HOUSE_PER_PAGE);
+        }
 
         $cities = $this->getDoctrine()
             ->getRepository(City::class)
@@ -35,6 +54,7 @@ class RentalController extends AbstractController
             'houses' => $houses,
             'cities' => $cities,
             'page' => $page,
+            'searchForm' => $searchForm->createView(),
         ]);
     }
 

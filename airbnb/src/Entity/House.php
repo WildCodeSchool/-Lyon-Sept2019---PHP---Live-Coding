@@ -33,6 +33,21 @@ class House
      */
     private $city;
 
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $bedNumber;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\RentalType")
+     */
+    private $type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -65,5 +80,48 @@ class House
     public function getSlug(): ?string
     {
         return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getBedNumber(): ?int
+    {
+        return $this->bedNumber;
+    }
+
+    public function setBedNumber(int $bedNumber): self
+    {
+        $this->bedNumber = $bedNumber;
+
+        return $this;
+    }
+
+    public function getType(): ?RentalType
+    {
+        return $this->type;
+    }
+
+    public function setType(?RentalType $type): self
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }
