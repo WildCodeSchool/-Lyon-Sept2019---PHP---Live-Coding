@@ -47,8 +47,14 @@ class HouseRepository extends ServiceEntityRepository
             $parameters['type'] = $filters['type'];
         }
         if (isset($filters['price']) && !empty($filters['price'])) {
-            $qb->andWhere('h.price = :price');
-            $parameters['price'] = $filters['price'];
+            if ($filters['price'][0] > -1) {
+                $qb->andWhere('h.price >= :price_min');
+                $parameters['price_min'] = $filters['price'][0];
+            }
+            if ($filters['price'][1] > -1) {
+                $qb->andWhere('h.price <= :price_max');
+                $parameters['price_max'] = $filters['price'][1];
+            }
         }
         if (isset($filters['bedNumber']) && !empty($filters['bedNumber'])) {
             $qb->andWhere('h.bedNumber = :bedNumber');

@@ -20,6 +20,8 @@
               <div class="card-body">
                 <h5 class="card-title">{{ house.title }}</h5>
                 <p class="card-text">{{ house.city.name }}</p>
+                <big><strong>{{ house.price }} €</strong></big>
+                <br/>
                 <a href="{{ path('rental_view', {slug: house.slug}) }}" class="btn btn-primary">Visiter</a>
               </div>
             </div>
@@ -29,9 +31,12 @@
     <nav aria-label="Page navigation example" style="align-self:flex-start;">
       <ul class="pagination">
 
+        {# {dump(app.request.query.all()|merge(['coucou']))} #}
+        {% set query_params = app.request.query.all() %}
+
         <li class="page-item">
           <a class="page-link" 
-              href="{{ path('rentals_list', {'page': page > 1 ? page - 1 : 1}) }}" aria-label="Previous">
+              href="{{ path('rentals_list', query_params|merge({'page': page > 1 ? page - 1 : 1})) }}" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
             <span class="sr-only">Previous</span>
           </a>
@@ -45,14 +50,14 @@
             {% else %}
               <li class="page-item">
                 <a class="page-link {{p == page ? 'disabled'}}" 
-                href="{{ path('rentals_list', {'page': p}) }}"
+                href="{{ path('rentals_list', query_params|merge({'page': p})) }}"
                 >{{p}}</a>
               </li>
             {% endif %}
           {% endif %}
         {% endfor %}
         <li class="page-item">
-          <a class="page-link" href="{{ path('rentals_list', {'page': page + 1}) }}" aria-label="Next">
+          <a class="page-link" href="{{ path('rentals_list', query_params|merge({'page': page + 1})) }}" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
             <span class="sr-only">Next</span>
           </a>

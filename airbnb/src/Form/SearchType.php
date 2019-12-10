@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\CallbackTransformer;
 
 class SearchType extends AbstractType
 {
@@ -26,12 +28,29 @@ class SearchType extends AbstractType
                 'class' => RentalType::class,
                 'choice_label' => 'title',
             ])
-            ->add('bedNumber', null, [
+            // ->add('bedNumber', null, [
+            //     'required' => false,
+            // ])
+            ->add('price', ChoiceType::class, [
                 'required' => false,
+                'choices' => [
+                    '> 75 €' => '75,-1',
+                    '50-75 €' => '50,75',
+                    '25-50 €' => '25,50',
+                    '< 25 €' => '0,25',
+                ],
             ])
-            ->add('price', null, [
-                'required' => false,
-            ])
+        ;
+
+        $builder->get('price')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($var) {
+                    return $var;
+                },
+                function ($var) {
+                    return explode(',', $var);
+                }
+            ))
         ;
     }
 
