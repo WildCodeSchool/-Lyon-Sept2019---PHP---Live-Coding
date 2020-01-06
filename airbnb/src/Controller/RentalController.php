@@ -7,8 +7,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\House;
 use App\Entity\City;
-
+use App\Entity\Booking;
+use App\Form\BookingType;
 use App\Form\SearchType;
+
+use App\Service\BookingManager;
+
+use Symfony\Component\Form\FormError;
 
 /**
  * @Route("/rentals")
@@ -61,10 +66,29 @@ class RentalController extends AbstractController
     /**
     * @Route("/{slug}", name="rental_view")
     */
-    public function view(House $house)
+    public function view(Request $request, House $house, BookingManager $bookingManager)
     {
+        $booking = new Booking();
+        $form = $this->createForm(BookingType::class, $booking);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $booking->setHouse($house);
+
+            if ($bookingManager->isBooked($house, $booking->getFromDate(), $booking->getToDate())) {
+                $form->addError(new FormError("unavailable > Already booked"));
+            } else {                
+                $em->persist($booking);
+                $em->flush();
+            }
+        }
+
         return $this->render('rental/view.html.twig', [
-            'house' => $house
+            'house' => $house,
+            'bookingForm' => $form->createView(),
         ]);
     }
 
