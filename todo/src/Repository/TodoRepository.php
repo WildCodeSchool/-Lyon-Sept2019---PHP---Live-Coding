@@ -19,32 +19,21 @@ class TodoRepository extends ServiceEntityRepository
         parent::__construct($registry, Todo::class);
     }
 
-    // /**
-    //  * @return Todo[] Returns an array of Todo objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function checkAll()
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+        $qb = $this->createQueryBuilder('t');
+        $q = $qb->update('App\Entity\Todo', 't')
+            ->set('t.isDone', 1)
             ->getQuery()
-            ->getResult()
-        ;
+            ->execute();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Todo
+    public function uncheckAll()
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->createQueryBuilder('t');
+        $q = $qb->update('App\Entity\Todo', 't')
+        ->set('t.isDone', 0)
+        ->getQuery()
+        ->execute();
     }
-    */
 }
